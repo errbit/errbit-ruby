@@ -8,7 +8,6 @@
 /tmp/
 *.gem
 .rspec_status
-Gemfile.lock
 
 # rubymine
 /.idea
