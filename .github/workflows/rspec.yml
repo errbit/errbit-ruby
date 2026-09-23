@@ -1,4 +1,4 @@
-name: Test
+name: RSpec
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  rspec:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
