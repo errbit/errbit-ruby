@@ -1,0 +1,139 @@
+openapi: 3.1.0
+info:
+  title: Errbit Error Ingestion API
+  description: >
+    A minimal API for reporting application exceptions to an Errbit server.
+    This is a new API design, not compatible with the Airbrake or Sentry
+    APIs. v1 covers error ingestion only.
+  version: "1.0.0"
+
+servers:
+  - url: https://errbit.example.com
+    description: Example Errbit server
+
+paths:
+  /api/v1/projects/{project_id}/errors/{api_key}:
+    post:
+      operationId: createError
+      summary: Report an exception
+      description: >
+        Submits a single exception occurrence for a project. Authenticates
+        the request via the project's API key embedded in the URL path.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/ApiKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorReport'
+      responses:
+        '202':
+          description: Error report accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorAck'
+        '400':
+          description: Malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid project_id/api_key combination.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Unknown project_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: Identifier of the project the error belongs to.
+      schema:
+        type: string
+    ApiKey:
+      name: api_key
+      in: path
+      required: true
+      description: Secret API key authorizing writes to this project.
+      schema:
+        type: string
+
+  schemas:
+    BacktraceFrame:
+      type: object
+      properties:
+        file:
+          type: string
+          description: Source file path for this stack frame.
+        line:
+          type: integer
+          description: Line number within the file, if known.
+        method:
+          type: string
+          description: Method or block name the frame was executing in.
+      additionalProperties: false
+
+    ErrorReport:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - class
+            - message
+          properties:
+            class:
+              type: string
+              description: Fully qualified exception class name.
+              examples:
+                - RuntimeError
+                - "Net::OpenTimeout"
+            message:
+              type: string
+              description: Exception message.
+            backtrace:
+              type: array
+              description: Ordered stack frames, innermost first.
+              items:
+                $ref: '#/components/schemas/BacktraceFrame'
+          additionalProperties: false
+      additionalProperties: false
+
+    ErrorAck:
+      type: object
+      required:
+        - id
+        - created_at
+      properties:
+        id:
+          type: string
+          description: Server-assigned identifier for the stored error occurrence.
+        created_at:
+          type: string
+          format: date-time
+      additionalProperties: false
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
+      additionalProperties: false

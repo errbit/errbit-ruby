@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "errbit"
+require "irb"
+
+Errbit.configure do |config|
+  config.host = "https://errbit.example.com"
+  config.project_id = "demo-project"
+  config.api_key = "demo-key"
+end
+
+IRB.start(__FILE__)
