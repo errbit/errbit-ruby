@@ -25,7 +25,7 @@ RSpec.describe Errbit::Client do
     stub = stub_request(:post, endpoint)
            .with(
              headers: { "Content-Type" => "application/json" },
-             body: hash_including(error: hash_including(class: "ArgumentError", message: "invalid input"))
+             body: hash_including("error" => hash_including("class" => "ArgumentError", "message" => "invalid input"))
            )
            .to_return(
              status: 202,
