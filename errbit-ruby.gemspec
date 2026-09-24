@@ -30,9 +30,9 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "net-http"
-  spec.add_runtime_dependency "json"
-  spec.add_runtime_dependency "uri"
+  spec.add_dependency "net-http"
+  spec.add_dependency "json"
+  spec.add_dependency "uri"
 
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "webmock"
