@@ -30,10 +30,11 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # Zero runtime dependencies: net/http, json, and uri all ship in the
-  # Ruby standard library.
+  spec.add_runtime_dependency "net-http"
+  spec.add_runtime_dependency "json"
+  spec.add_runtime_dependency "uri"
 
-  spec.add_development_dependency "rspec", "~> 3.13"
-  spec.add_development_dependency "webmock", "~> 3.23"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "webmock"
   spec.add_development_dependency "rubocop", "~> 1.65"
 end
