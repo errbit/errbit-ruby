@@ -57,10 +57,10 @@ end
 result = Errbit.notify(e)
 
 result.success? # => true/false
-result.ignored?  # => true if the exception matched config.ignore
-result.failure?  # => true on a 4xx/5xx response from the server
-result.id         # => server-assigned id, on success
-result.error      # => server error message, on failure
+result.ignored? # => true if the exception matched config.ignore
+result.failure? # => true on a 4xx/5xx response from the server
+result.id       # => server-assigned id, on success
+result.error    # => server error message, on failure
 ```
 
 A report is delivered synchronously over HTTP(S) on the calling thread. A
